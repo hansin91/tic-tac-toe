@@ -1,40 +1,56 @@
 .tic-tac-toe {
-	width: 220px;
-	margin: 0 auto;
+	padding: 1.5rem;
 
 	&__content {
-		width: 226px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__header {
+		display: flex;
+		justify-content: center;
 	}
 
 	&__game {
-		float: left;
-		padding: 0;
-		clear: both;
-		li {
-			float: left;
-			padding: 0;
-			list-style: none;
-			text-align: center;
-			margin-bottom: 20px;
-			color: #fff;
-			height: 60px;
-			line-height: 60px;
-			font-size: 40px;
-			color: #ccc;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 1rem;
+		grid-template-areas: "head head head" "box-1 box-2 box-3" "box-4 box-5 box-6" "box-7 box-8 box-9"
+			"button button button";
 
-			&.disable {
-				color: #fff;
-			}
+		&__square {
+			padding: 5rem;
+			background-color: #ccc;
+			border-radius: 1rem;
+			font-size: 4rem;
+			font-weight: 400;
+		}
+	}
 
-			&::-moz-selection {
-				background: none;
-				color: #000;
-			}
+	&__message {
+		grid-area: head;
+		p {
+			font-size: 2rem;
+			padding-bottom: 2rem;
+			color: #333333;
+			font-weight: 700;
+		}
+	}
 
-			&::-webkit-selection {
-				background: none;
-				color: #000;
-			}
+	&__reset {
+		grid-area: button;
+	}
+
+	.win_content {
+		flex: 1;
+		text-align: center;
+		width: 100%;
+
+		&__times {
+			display: inline-block;
+			margin-top: 1.5rem;
+			font-size: 3rem;
 		}
 	}
 }

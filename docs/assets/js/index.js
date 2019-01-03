@@ -3,17 +3,29 @@
 		O = 'O',
 		win_X = 0,
 		win_O = 0,
-		turn = 'X',
+		turn = '',
 		winner = null;
+
+	var randomTurn = function() {
+		var number = Math.floor(Math.random() * 100 + 1);
+		if (number % 2 == 0) {
+			turn = 'O';
+		} else {
+			turn = 'X';
+		}
+	};
+
 	var switchTurn = function() {
 		if (checkWinner(turn)) {
-			alert(turn + ' has won the game. Start a new game');
 			countWin();
 			winner = turn;
+			setMessage(turn + ' has won the game. Start a new game');
 		} else if (turn == X) {
 			turn = O;
+			setMessage("It's " + turn + " 's turn");
 		} else {
 			turn = X;
+			setMessage("It's " + turn + " 's turn");
 		}
 	};
 
@@ -69,7 +81,7 @@
 	};
 
 	var clearBox = function() {
-		$('#game .tic-tac-toe__game--square')
+		$('#game .tic-tac-toe__game__square')
 			.removeClass('btn-info')
 			.removeClass('btn-primary')
 			.removeClass('disable')
@@ -79,21 +91,32 @@
 	var startNewGame = function() {
 		clearBox();
 		winner = null;
+		randomTurn();
+		setMessage(turn + " GET'S TO START ");
+	};
+
+	var setMessage = function(message) {
+		$('#message').text(message);
 	};
 
 	$(function() {
-		$('#game .tic-tac-toe__game--square').on('click', function() {
+		randomTurn();
+		setMessage(turn + " GET'S TO START ");
+
+		$('#game .tic-tac-toe__game__square').on('click', function() {
 			if (winner != null) {
-				alert(turn + ' has won the game. Start a new game');
+				setMessage(turn + ' has won the game. Start a new game');
 			} else if ($(this).text() == '+') {
 				$(this).text(turn);
 				addClass($(this));
 				switchTurn();
 				if (parseInt(checkTie()) == 9 && winner == null) {
-					alert('Its a tie. It will restart.');
+					setMessage("It's a tie. It will restart.");
 				}
 			} else {
-				alert('Already Selected');
+				if (winner == null && parseInt(checkTie()) !== 9) {
+					setMessage('Already Selected');
+				}
 			}
 		});
 
