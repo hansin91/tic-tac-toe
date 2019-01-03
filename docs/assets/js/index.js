@@ -4,7 +4,8 @@
 		win_X = 0,
 		win_O = 0,
 		turn = '',
-		winner = null;
+		winner = null,
+		boxes = 16;
 
 	var randomTurn = function() {
 		var number = Math.floor(Math.random() * 100 + 1);
@@ -47,9 +48,9 @@
 		return $('#s' + number).text();
 	};
 
-	var checkRow = function(a, b, c, turn) {
+	var checkRow = function(a, b, c, d, turn) {
 		var result = false;
-		if (getBox(a) == turn && getBox(b) == turn && getBox(c) == turn) {
+		if (getBox(a) == turn && getBox(b) == turn && getBox(c) == turn && getBox(d) == turn) {
 			result = true;
 		}
 		return result;
@@ -58,14 +59,16 @@
 	var checkWinner = function(move) {
 		var result = false;
 		if (
-			checkRow(1, 2, 3, move) ||
-			checkRow(4, 5, 6, move) ||
-			checkRow(7, 8, 9, move) ||
-			checkRow(1, 4, 7, move) ||
-			checkRow(2, 5, 8, move) ||
-			checkRow(3, 6, 9, move) ||
-			checkRow(1, 5, 9, move) ||
-			checkRow(3, 5, 7, move)
+			checkRow(1, 2, 3, 4, move) ||
+			checkRow(5, 6, 7, 8, move) ||
+			checkRow(9, 10, 11, 12, move) ||
+			checkRow(13, 14, 15, 16, move) ||
+			checkRow(1, 5, 9, 13, move) ||
+			checkRow(2, 6, 10, 14, move) ||
+			checkRow(3, 7, 11, 15, move) ||
+			checkRow(4, 8, 12, 16, move) ||
+			checkRow(1, 6, 11, 16, move) ||
+			checkRow(4, 7, 10, 13, move)
 		) {
 			result = true;
 		}
@@ -110,11 +113,11 @@
 				$(this).text(turn);
 				addClass($(this));
 				switchTurn();
-				if (parseInt(checkTie()) == 9 && winner == null) {
+				if (parseInt(checkTie()) == boxes && winner == null) {
 					setMessage("It's a tie. It will restart.");
 				}
 			} else {
-				if (winner == null && parseInt(checkTie()) !== 9) {
+				if (winner == null && parseInt(checkTie()) !== boxes) {
 					setMessage('Already Selected');
 				}
 			}
