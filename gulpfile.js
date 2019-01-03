@@ -46,7 +46,7 @@ gulp.task('build:js', [ 'clean:js' ], () => {
 gulp.task('serve', () => {
 	browserSync.init({
 		server: {
-			baseDir: 'app'
+			baseDir: 'docs'
 		}
 	});
 });
