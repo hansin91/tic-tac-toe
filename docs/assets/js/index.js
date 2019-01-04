@@ -3,8 +3,11 @@
 		O = 'O',
 		win_X = 0,
 		win_O = 0,
+		moves_X = [],
+		moves_O = [],
 		turn = '',
 		winner = null,
+		moves = 0,
 		boxes = 16;
 
 	var randomTurn = function() {
@@ -17,7 +20,7 @@
 	};
 
 	var switchTurn = function() {
-		if (checkWinner(turn)) {
+		if (checkWinner()) {
 			countWin();
 			winner = turn;
 			setMessage(turn + ' has won the game. Start a new game');
@@ -44,34 +47,45 @@
 		$('#win_O').text(win_O);
 	};
 
-	var getBox = function(number) {
-		return $('#s' + number).text();
-	};
-
-	var checkRow = function(a, b, c, d, turn) {
+	var checkWinner = function() {
 		var result = false;
-		if (getBox(a) == turn && getBox(b) == turn && getBox(c) == turn && getBox(d) == turn) {
-			result = true;
-		}
-		return result;
-	};
+		if (moves >= 4) {
+			var winningCombos = [
+				[ 1, 2, 3, 4 ],
+				[ 5, 6, 7, 8 ],
+				[ 9, 10, 11, 12 ],
+				[ 13, 14, 15, 16 ],
+				[ 1, 5, 9, 13 ],
+				[ 2, 6, 10, 14 ],
+				[ 3, 7, 11, 15 ],
+				[ 4, 8, 12, 16 ],
+				[ 1, 6, 11, 16 ],
+				[ 4, 7, 10, 13 ]
+			];
 
-	var checkWinner = function(move) {
-		var result = false;
-		if (
-			checkRow(1, 2, 3, 4, move) ||
-			checkRow(5, 6, 7, 8, move) ||
-			checkRow(9, 10, 11, 12, move) ||
-			checkRow(13, 14, 15, 16, move) ||
-			checkRow(1, 5, 9, 13, move) ||
-			checkRow(2, 6, 10, 14, move) ||
-			checkRow(3, 7, 11, 15, move) ||
-			checkRow(4, 8, 12, 16, move) ||
-			checkRow(1, 6, 11, 16, move) ||
-			checkRow(4, 7, 10, 13, move)
-		) {
-			result = true;
+			winningCombos.map(function(combo) {
+				var win_X = 0;
+				var win_O = 0;
+				combo.map(function(c) {
+					if (moves_X.indexOf(c) !== -1) {
+						win_X++;
+					}
+
+					if (moves_O.indexOf(c) !== -1) {
+						win_O++;
+					}
+
+					if (win_X === 4) {
+						result = true;
+					}
+
+					if (win_O === 4) {
+						result = true;
+					}
+				});
+			});
 		}
+
 		return result;
 	};
 
@@ -95,6 +109,9 @@
 		clearBox();
 		winner = null;
 		randomTurn();
+		moves = 0;
+		moves_X = [];
+		moves_O = [];
 		setMessage(turn + " GET'S TO START ");
 	};
 
@@ -107,11 +124,19 @@
 		setMessage(turn + " GET'S TO START ");
 
 		$('#game .tic-tac-toe__game__square').on('click', function() {
+			moves++;
 			if (winner != null) {
 				setMessage(turn + ' has won the game. Start a new game');
 			} else if ($(this).text() == '+') {
 				$(this).text(turn);
 				addClass($(this));
+
+				if (turn == X) {
+					moves_X.push(parseInt($(this).attr('id')));
+				} else {
+					moves_O.push(parseInt($(this).attr('id')));
+				}
+
 				switchTurn();
 				if (parseInt(checkTie()) == boxes && winner == null) {
 					setMessage("It's a tie. It will restart.");
